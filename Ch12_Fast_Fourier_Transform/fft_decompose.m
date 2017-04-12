@@ -12,8 +12,8 @@ function y = fft_decompose(S)
     end
   end
   if length(y1) > 1
-    y1 = fft_split(y1);
-    y2 = fft_split(y2);
+    y1 = fft_decompose(y1);
+    y2 = fft_decompose(y2);
   end
   y = [y1 y2];
 end
