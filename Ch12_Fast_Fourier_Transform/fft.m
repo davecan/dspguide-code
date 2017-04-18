@@ -7,7 +7,7 @@ function [rex, imx] = fft(rex, imx)
   
   rex = fft_decompose(rex);
   imx = fft_decompose(imx);
-  
+    
   # construct signal by walking backward up the tree, 
   # calculating the butterfly for each value in each level.
   
