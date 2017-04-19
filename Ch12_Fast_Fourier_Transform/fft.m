@@ -22,10 +22,16 @@ function [rex, imx] = fft(rex, imx)
     
     # for each node in this level of the tree
     for j = 1:le2
-      jm1 = j-1;
       # calculate the butterfly for this node
-      for i = j:le:nm1
-        ip = i + le2;
+      for i = j:le:n
+        if i <= length(rex) - le2
+          ip = i + le2;
+        else
+          ip = i;
+        end
+        
+        #[i le2 ip]
+        
         tr = rex(ip) * ur - imx(ip) * ui;
         ti = rex(ip) * ui + imx(ip) * ur;
         rex(ip) = rex(i) - tr;
