@@ -4,14 +4,15 @@
 function y = reduce(big, small)
   # finds center point of big
   # then builds back to start/end row/col numbers
-  # and then extracts the slice from those points
-  big_center_row = ceil(rows(big)/2);
-  big_center_col = ceil(columns(big)/2);
-  small_center_row = ceil(rows(small)/2);
-  small_center_col = ceil(columns(small)/2);
-  start_row = big_center_row - (small_center_row - 1);          # subtracts distance to start row of small
-  end_row = big_center_row + (rows(small) - small_center_row);  # adds distance to end row of small
-  start_col = big_center_col - (small_center_col - 1);        
-  end_col = big_center_col + (columns(small) - small_center_col);
+  # and then extracts the slice from those points.
+  # bcr -> big center row, scc -> small center column, etc.
+  bcr = ceil(rows(big)/2);
+  bcc = ceil(columns(big)/2);
+  scr = ceil(rows(small)/2);
+  scc = ceil(columns(small)/2);
+  start_row = bcr - (scr - 1);          # subtracts distance to start row of small
+  end_row = bcr + (rows(small) - scr);  # adds distance to end row of small
+  start_col = bcc - (scc - 1);        
+  end_col = bcc + (columns(small) - scc);
   y = big(start_row:end_row, start_col:end_col);
 end

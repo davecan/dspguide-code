@@ -23,7 +23,7 @@ def fft(rex, imx):
         si = -math.sin(math.pi / le2)
 
         # loop for each sub-dft
-        for j in range(0, le2):
+        for j in range(1, le2):
             jm1 = j-1
             # loop for each butterfly
             for i in range(jm1, nm1, le):
@@ -49,9 +49,9 @@ def inverse_fft(rex, imx):
 
     [rex,imx] = fft(rex,imx)
 
-    for i in range(0,n):
+    for i in range(0,n-1):
         rex[i] = rex[i] / n
-        imx[i] = imx[i] / n
+        imx[i] = -imx[i] / n
 
     return [rex, imx]
 
@@ -81,21 +81,46 @@ def bitrev(L):
     return [int(b,2) for b in B]
 
 
+def fft_decompose(S):
+    y1 = []
+    y2 = []
+    for k in range(0,len(S)):
+        if k % 2 == 0:
+            y2.append(S[k])
+        else:
+            y1.append(S[k])
+    
+    if len(y1) > 1:
+        y1 = fft_decompose(y1)
+        y2 = fft_decompose(y2)
+
+    x = []
+    x.append(y1)
+    x.append(y2)
+    x = [item for sublist in x for item in sublist]
+    return x
+
+
+
 
 if __name__ == "__main__":
-    n = 16
-    imx = [0]*n
-    S1 = [math.sin(s) for s in range(0,n)]
-    S2 = [2 * math.sin(2 * s + 2) for s in range(0,n)]
-    rex = [int(a+b) for a,b in zip(S1,S2)]  # normalized to ints, dealing with binary floats requires lots of special handling...
-    print(rex)
-    print("="*50)
+    # n = 16
+    # imx = [0]*n
+    # S1 = [math.sin(s) for s in range(0,n)]
+    # S2 = [2 * math.sin(2 * s + 2) for s in range(0,n)]
+    # rex = [int(a+b) for a,b in zip(S1,S2)]  # normalized to ints, dealing with binary floats requires lots of special handling...
+    # print(rex)
+    # print("="*50)
 
-    [rex2, imx2] = fft(rex, imx)
-    print(rex2)
-    print(imx2)
-    print("="*50)
+    # [rex2, imx2] = fft(rex, imx)
+    # print(rex2)
+    # print(imx2)
+    # print("="*50)
 
-    [rex3, imx3] = inverse_fft(rex2, imx2)
-    print(rex3)
-    print(imx3)
+    # [rex3, imx3] = inverse_fft(rex2, imx2)
+    # print(rex3)
+    # print(imx3)
+
+    S = [x for x in range(0,16)]
+    print(S)
+    print(fft_decompose(S))

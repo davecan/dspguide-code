@@ -1,8 +1,11 @@
-function x = convolve(x,kernel)
-  *** Should call expand() here instead of requiring the caller to prep the matrix first
-  original = x;
-  for xrow = 1:rows(x)-2         # -2 offset to account for positioning 
-    for xcol = 1:columns(x)-2    # the top left pixel of the 3x3 kernel
+# handles arbitrary sized img
+# but only works for 3x3 filter kernel
+function result = convolve(img,kernel)
+  x = expand(img);
+  kernel = flipud(fliplr(kernel));  # have to rotate 180 or the result is inverted
+  result = zeros(rows(x), columns(x));
+  for xrow = 1:rows(x)-2         # -2 offsets to account for positioning the kernel
+    for xcol = 1:columns(x)-2    # at the top left pixel of the expanded image matrix
       # kernel row 1
       v = x(xrow,xcol) * kernel(1,1);   #****  CONVERT THIS TO AN INNER LOOP!!
       v = v + x(xrow, xcol+1) * kernel(1,2);
@@ -14,10 +17,13 @@ function x = convolve(x,kernel)
       # kernel row 3
       v = v + x(xrow+2, xcol) * kernel(3,1);
       v = v + x(xrow+2, xcol+1) * kernel(3,2);
-      v = v + x(xrow+2, xcol+2) * kernel(3,3);
+      v = v + x(xrow+2, xcol+2) * kernel(3,3);      
       # now set the weighted sum under the center pixel of the filter kernel
-      x(xrow+1, xcol+1) = v;
+      result(xrow+1, xcol+1) = v;
     end
   end
-  x = reduce(x, original);
+  result = reduce(result, img);
 end
+
+
+
