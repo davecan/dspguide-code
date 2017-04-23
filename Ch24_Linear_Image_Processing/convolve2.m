@@ -1,3 +1,4 @@
+# INPUT SIDE algorithm!
 # same as convolve() but with kernel loop
 # only handles 3x3 kernels
 function result = convolve2(img,kernel)
