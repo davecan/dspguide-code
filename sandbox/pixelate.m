@@ -1,7 +1,8 @@
-# crude pixelation filter
+% crude pixelation filter
 function y = pixelate(x)
-  for m = 1:2:rows(x)
-    for n = 1:2:columns(x)
+  [r c] = size(x);
+  for m = 1:2:r
+    for n = 1:2:c
       v = x(m,n);
       y(m,n) = v;
       y(m,n+1) = v;
