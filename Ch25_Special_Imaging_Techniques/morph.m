@@ -1,47 +1,41 @@
-function result = morph(img, name, kernel)
-% MORPH  Applies a morphological operation to an image.
-%   RESULT = MORPH(IMG, NAME) Applies the specified operation using the default masking kernel.
-%   RESULT = MORPH(IMG, NAME, KERNEL) Applies the specified operation using the specified masking kernel.
+function result = morph(img, name)
+% MORPH_MANUAL  Applies a morphological operation to an image using nested loops.
+%   RESULT = MORPH(IMG, NAME) Applies the specified operation using a 3x3 structuring element / kernel.
 %   NAME can be either 'erode' or 'dilate'.
-%   KERNEL is a 3x3 matrix. All nonzero values mark pixels that are tested for the center pixel.
-%          The kernel is swept across the img as in convolution.
-%   DEFAULT KERNEL = [1 1 1; 1 1 1; 1 1 1].
 
-    default_kernel = [1 1 1; 1 1 1; 1 1 1];
-    if nargin < 3
-        kernel = default_kernel;  % pattern to check for morph operation
-    end
-    if nargin < 4
-        if ischar(kernel) && kernel == 'default'
-            kernel = default_kernel;
-        end
-    end
-    [r,c] = size(img);
-    if strcmp(name, 'erode')
-        wrapval = -1;
-    else
-        wrapval = 999;
-    end
-    result = ones(r, c) * -1;
-    x = expand(img, wrapval);
-    [r,c] = size(x);
+% TODO allow different 3x3 patterns -- can use method of linearized convolve.m in this folder
+% TODO allow arbitrary sized structuring elements?
+
+    % Strategy: Treat img as linear array, checking linear offsets from current img pixel based on 
+    %           the linear distance of each pixel in the structuring element from its center
+
+    [h w] = size(img);
+    nel = numel(img);  % total number elements in the matrix -- equals h * w
+    result = ones(h, w) * -1;
     
-    F = find(kernel);       % Gets the linearized positions of all nonzero values in the kernel.
-                            % These mark where the morph should check for differences in value.
+    for li = 1:nel
+        % check linear offsets
+        check = [];
+        % top row
+        if li - h - 1 > 0;    check(end+1) = li - h - 1; end;
+        if li - 1 > 0;        check(end+1) = li - 1;     end;
+        if li + h - 1 <= nel; check(end+1) = li + h - 1; end;
+        % middle row
+        if li - h > 0;        check(end+1) = li - h;     end;
+        check(end+1) = li;
+        if li + h <= nel;     check(end+1) = li + h;     end;
+        % bottom row
+        if li - h + 1 > 0;    check(end+1) = li - h + 1; end;
+        if li + 1 <= nel;     check(end+1) = li + 1;     end;
+        if li + h + 1 <= nel; check(end+1) = li + h + 1; end;
 
-    kern_row_offset = 2;
-    kern_col_offset = 2;
-                            
-    for m = 1:r-2                   % The -2 offset accounts for positioning the kernel
-        for n = 1:c-2               % at the top left pixel of the expanded image matrix.
-            % Extract region of interest centered on current pixel of source img.
-            s = x(m:m+kern_row_offset,n:n+kern_col_offset);     
-            switch name
-                case 'erode'
-                    result(m,n) = max(s(F));    % checks all linear index positions marked in the kernel as found in F
-                case 'dilate'
-                    result(m,n) = min(s(F));
-            end
-        end
+        v = img(check);
+        
+        switch name
+            case 'erode'
+                result(li) = max(v);
+            case 'dilate'
+                result(li) = min(v);
+        end 
     end
 end
