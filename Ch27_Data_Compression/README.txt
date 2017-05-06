@@ -10,7 +10,7 @@ Demo:
     delta_data = delta_decode(data);
     plot(delta_data)
 
-![slowdata_delta.png](dspguide-code/Ch27_Data_Compression/slowdata_delta.png?raw=true "slowdata_delta.png")
+![slowdata_delta.png](dspguide-code/Ch27_Data_Compression/slowdata_delta.png "slowdata_delta.png")
     
     rle_data = rle(delta_data);
     plot(rle_data)
