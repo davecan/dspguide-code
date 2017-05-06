@@ -14,7 +14,7 @@ function b = willbreak(img, rowind, colind, neighborhood)
     % strategy is to treat the matrix as a linear array
     li = sub2ind(size(img), rowind, colind);  % get linear index of the coordinate pair
     [h w] = size(img);
-    els = h*w;   % numel() throws weird vector error here so do it manually
+    els = length(img);
     b = 0;
     
     if img(rowind,colind) ~= 0
