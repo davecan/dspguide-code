@@ -4,18 +4,18 @@ Demo:
 
     data = slowdata(512);
     plot(data)
-    
-slowdata.png
+  
+![slowdata.png](slowdata.png?raw=true "slowdata.png")  
     
     delta_data = delta_decode(data);
     plot(delta_data)
-    
-slowdata_delta.png
+
+![slowdata_delta.png](slowdata_delta.png?raw=true "slowdata_delta.png")
     
     rle_data = rle(delta_data);
     plot(rle_data)
     
-slowdata_rle.png
+![slowdata_rle.png](slowdata_rle.png?raw=true "slowdata_rle.png")
     
     >>> whos('data')
       Name      Size             Bytes  Class     Attributes
