@@ -4,11 +4,11 @@ function y = slowdata(n)
         r = randi(10);
         if r <= 8
             y(end+1) = y(i-1);
-        % can rise/fall by 10%
+        % can rise/fall by 1%
         elseif r <= 9
-            y(end+1) = y(i-1) + y(i-1) * 0.1;
+            y(end+1) = y(i-1) + y(i-1) * 0.01;
         else
-            y(end+1) = y(i-1) - y(i-1) * 0.1;
+            y(end+1) = y(i-1) - y(i-1) * 0.01;
         end
     end
 end
